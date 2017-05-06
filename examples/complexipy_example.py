@@ -20,6 +20,8 @@ def clean_after_nothing():
     pass
 
 
+from possible_complexities import solve_nlogn_equation
+
 time_complexity_for_printing = TimeComplexity(get_strings, print_strings, clean_after_nothing, 30)
 complexity_for_printing = time_complexity_for_printing.get_time_complexity()
 print("Complexity for printing is ", complexity_for_printing)

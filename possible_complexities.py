@@ -8,11 +8,11 @@ COMPLEXITY_LOGN = {
 
 
 def solve_nlogn_equation(time, fixed_coefficient):
-    min_value = 0
+    min_value = 1
     max_value = 10e8
     value_looked_for = time / fixed_coefficient
 
-    while min_value < max_value:
+    while min_value + 1 < max_value:
         middle_value = (min_value + max_value) // 2
         tmp = middle_value * math.log(2, middle_value)
 
