@@ -1,14 +1,8 @@
 from random import randint
 from timeout import timeout, TimeOutError
-import math
 from timeit import Timer
 
-COMPLEXITY_NLOGN = "nlogn"
-COMPLEXITY_N = "n"
-COMPLEXITY_N2 = "n^2"
-
-
-POSSIBLE_COMPLEXITIES = [COMPLEXITY_NLOGN, COMPLEXITY_N, COMPLEXITY_N2]
+from possible_complexities import POSSIBLE_COMPLEXITIES
 
 
 class ComplexityCannotBeFound(Exception):
@@ -23,53 +17,45 @@ class ComplexityCalculator(object):
         self.quotients = {}
 
         for possible_complexity in POSSIBLE_COMPLEXITIES:
-            self.quotients[possible_complexity] = []
+            self.quotients[possible_complexity['name']] = []
         self.time_complexity = None
+        self.fixed_coefficient = None # for example when real complexity is multiplied by a: (a*n)
 
     def store_data_about_time(self, problem_size, time_decimal):
-        self.quotients[COMPLEXITY_N].append(time_decimal/problem_size)
-        self.quotients[COMPLEXITY_N2].append(time_decimal/(problem_size*problem_size))
-        self.quotients[COMPLEXITY_NLOGN].append(time_decimal/(problem_size * math.log(2, problem_size)))
+        for possible_complexity in POSSIBLE_COMPLEXITIES:
+            self.quotients[possible_complexity['name']].append(time_decimal/possible_complexity['formula'](problem_size))
 
     @timeout()
-    def calculate_time_complexity(self):
-        i = 0
-        while True:
-            i += 1
-            problem_size = randint(100, 3000)
+    def calculate_time_complexity_and_coefficient(self):
+        for _ in range(20):
+            problem_size = randint(100000, 1000000)
             initialized_data = self.data_structure_initializer(problem_size)
 
             t = Timer(lambda: self.algorithm_function(initialized_data))
             time_decimal = t.timeit(number=1)
 
             self.store_data_about_time(problem_size, time_decimal)
-            if i > 20:
-                break
 
-        most_accurate = float('inf')
-        found_complexity = None
-        for key, values in self.quotients.items():
-            truncated_list = values[3:-3]
-            min_value = sorted(truncated_list)[0]
-            max_value = sorted(truncated_list)[-1]
-            tmp = (max_value - min_value)/min_value
+        tmp_almost_accurate = ('', float('inf'))
+        tmp_most_accurate = ('', float('inf'))  # store (complexity_name, complexity_coefficient)
+        for complexity_name, values in self.quotients.items():
+            truncated_list = sorted(values)[3:-3]
+            min_value = truncated_list[0]
+            max_value = truncated_list[-1]
+            tmp_relative_coefficient = (max_value - min_value)/min_value
 
-            if tmp < most_accurate:
-                most_accurate = tmp
-                found_complexity = key
+            if tmp_relative_coefficient < tmp_most_accurate[1]:
+                tmp_almost_accurate = tmp_most_accurate
+                tmp_most_accurate = (complexity_name, tmp_relative_coefficient)
+                tmp_fixed_coefficient = (max_value - min_value) / 2
 
-        if not found_complexity:
+        if tmp_most_accurate[1] * 2 > tmp_almost_accurate[1]:
             raise ComplexityCannotBeFound
-        self.time_complexity = found_complexity
-        return self.time_complexity
+
+        self.time_complexity = next((item for item in POSSIBLE_COMPLEXITIES if item['name'] == tmp_most_accurate[0]), None)
+        self.fixed_coefficient = tmp_fixed_coefficient
 
     def get_time_complexity(self):
         if not self.time_complexity:
-            try:
-                self.calculate_time_complexity()
-            except TimeOutError:
-                print("timeout reached")
-            except ComplexityCannotBeFound:
-                raise ComplexityCannotBeFound
-
-        return self.time_complexity
+            self.calculate_time_complexity_and_coefficient()
+        return self.fixed_coefficient, self.time_complexity
