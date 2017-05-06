@@ -20,9 +20,9 @@ def clean_after_nothing():
     pass
 
 
-# time_complexity_for_printing = TimeComplexity(get_strings, print_strings, clean_after_nothing, 30)
-# complexity_for_printing = time_complexity_for_printing.get_time_complexity()
-# print("Complexity for printing is ", complexity_for_printing)
+time_complexity_for_printing = TimeComplexity(get_strings, print_strings, clean_after_nothing, 30)
+complexity_for_printing = time_complexity_for_printing.get_time_complexity()
+print("Complexity for printing is ", complexity_for_printing)
 
 
 def generate_list(problem_size):
@@ -38,12 +38,12 @@ def bubble_sort(list_to_sort):
                 list_to_sort[i] = list_to_sort[i+1]
                 list_to_sort[i+1] = temp
 
-#
-time_complexity_for_bubble_sort = TimeComplexity(generate_list, bubble_sort, clean_after_nothing, 3)
+
+time_complexity_for_bubble_sort = TimeComplexity(generate_list, bubble_sort, clean_after_nothing, 300)
 complexity_for_bubble_sort = time_complexity_for_bubble_sort.get_time_complexity()
 print("Complexity for bubble sort is ", complexity_for_bubble_sort)
 
 
-time_complexity_for_merge_sort = TimeComplexity(generate_list, sorted, clean_after_nothing, 300)
+time_complexity_for_merge_sort = TimeComplexity(generate_list, sorted, clean_after_nothing, 30)
 complexity_for_merge_sort = time_complexity_for_merge_sort.get_time_complexity()
 print("Complexity for python `sorted`is ", complexity_for_merge_sort)

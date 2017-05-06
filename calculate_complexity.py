@@ -19,7 +19,7 @@ class ComplexityCalculator(object):
         for possible_complexity in POSSIBLE_COMPLEXITIES:
             self.quotients[possible_complexity['name']] = []
         self.time_complexity = None
-        self.fixed_coefficient = None # for example when real complexity is multiplied by a: (a*n)
+        self.fixed_coefficient = None  # for example when real complexity is multiplied by a: (a*n)
 
     def store_data_about_time(self, problem_size, time_decimal):
         for possible_complexity in POSSIBLE_COMPLEXITIES:
@@ -27,29 +27,27 @@ class ComplexityCalculator(object):
 
     @timeout()
     def calculate_time_complexity_and_coefficient(self):
-        for _ in range(20):
-            problem_size = randint(100000, 1000000)
+        for _ in range(40):
+            problem_size = randint(100, 100000)
             initialized_data = self.data_structure_initializer(problem_size)
 
             t = Timer(lambda: self.algorithm_function(initialized_data))
             time_decimal = t.timeit(number=1)
-
             self.store_data_about_time(problem_size, time_decimal)
 
         tmp_almost_accurate = ('', float('inf'))
         tmp_most_accurate = ('', float('inf'))  # store (complexity_name, complexity_coefficient)
         for complexity_name, values in self.quotients.items():
-            truncated_list = sorted(values)[3:-3]
+            truncated_list = sorted(values)[2:-2]
             min_value = truncated_list[0]
             max_value = truncated_list[-1]
             tmp_relative_coefficient = (max_value - min_value)/min_value
-
             if tmp_relative_coefficient < tmp_most_accurate[1]:
                 tmp_almost_accurate = tmp_most_accurate
                 tmp_most_accurate = (complexity_name, tmp_relative_coefficient)
                 tmp_fixed_coefficient = (max_value - min_value) / 2
 
-        if tmp_most_accurate[1] * 2 > tmp_almost_accurate[1]:
+        if tmp_most_accurate[1] * 1.2 > tmp_almost_accurate[1]:
             raise ComplexityCannotBeFound
 
         self.time_complexity = next((item for item in POSSIBLE_COMPLEXITIES if item['name'] == tmp_most_accurate[0]), None)

@@ -18,10 +18,10 @@ class TimeComplexity(object):
             try:
                 self.fixed_coefficient, self.time_complexity = complexity_calculator.get_time_complexity()
             except TimeOutError:
-                print("Timeout has been to small to find out what the complexity is")
+                print("Timeout has been to small to find out what the complexity is.")
+                return
             except ComplexityCannotBeFound:
                 print("Complexity cannot be found!")
-            finally:
                 return
         return self.time_complexity['name']
 
