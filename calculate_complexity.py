@@ -1,5 +1,5 @@
 from random import randint
-from timeout import timeout, TimeOutError
+from timeout import timeout
 from timeit import Timer
 
 from possible_complexities import POSSIBLE_COMPLEXITIES
