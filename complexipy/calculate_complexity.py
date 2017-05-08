@@ -27,8 +27,8 @@ class ComplexityCalculator(object):
 
     @timeout()
     def calculate_time_complexity_and_coefficient(self):
-        for _ in range(40):
-            problem_size = randint(100, 100000)
+        for _ in range(20):
+            problem_size = randint(100, 30000)
             initialized_data = self.data_structure_initializer(problem_size)
 
             t = Timer(lambda: self.algorithm_function(initialized_data))
