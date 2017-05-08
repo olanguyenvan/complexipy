@@ -1,4 +1,4 @@
-from complexipy import TimeComplexity
+from complexipy.complexipy import TimeComplexity
 from random import randint, choice
 from string import ascii_letters
 

@@ -1,8 +1,8 @@
 from random import randint
-from timeout import timeout
+from complexipy.timeout import timeout
 from timeit import Timer
 
-from possible_complexities import POSSIBLE_COMPLEXITIES
+from complexipy.possible_complexities import POSSIBLE_COMPLEXITIES
 
 
 class ComplexityCannotBeFound(Exception):

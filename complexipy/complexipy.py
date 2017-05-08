@@ -1,5 +1,5 @@
-from calculate_complexity import ComplexityCalculator, ComplexityCannotBeFound
-from timeout import TimeOutError
+from complexipy.calculate_complexity import ComplexityCalculator, ComplexityCannotBeFound
+from complexipy.timeout import TimeOutError
 
 
 class TimeComplexity(object):
